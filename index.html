@@ -1,77 +1,643 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>NU Transcript Fetcher</title>
-  <!-- Load CSS from your GitHub repo -->
-  <link 
-    rel="stylesheet" 
-    href="https://cdn.jsdelivr.net/gh/sanecodeguy/FlexRizz@main/styles.css">
-  
-  <!-- Load utils.js and inject.js from GitHub -->
-  <script src="https://cdn.jsdelivr.net/gh/sanecodeguy/FlexRizz@main/utils.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/sanecodeguy/FlexRizz@main/inject.js"></script>
-  
-  <style>
-    body { 
-      font-family: Arial, sans-serif; 
-      max-width: 800px; 
-      margin: 0 auto; 
-      padding: 20px;
-    }
-    button {
-      padding: 10px 15px;
-      background: #0066cc;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    #results {
-      margin-top: 20px;
-      padding: 15px;
-      border: 1px solid #ddd;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlexRizz | Premium Student Portal Enhancement</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #3f37c9;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --gray-light: #e2e8f0;
+            --success: #10b981;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background-color: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .cta-button {
+            background-color: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .cta-button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 180px 0 100px;
+            background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(67, 97, 238, 0.1) 0%, rgba(67, 97, 238, 0) 70%);
+            z-index: 0;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 600px;
+        }
+        
+        .hero h1 {
+            font-size: 52px;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero p {
+            font-size: 18px;
+            color: var(--gray);
+            margin-bottom: 40px;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .primary-button {
+            background-color: var(--primary);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(67, 97, 238, 0.2);
+        }
+        
+        .primary-button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(67, 97, 238, 0.3);
+        }
+        
+        .secondary-button {
+            background-color: white;
+            color: var(--primary);
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            border: 1px solid var(--gray-light);
+        }
+        
+        .secondary-button:hover {
+            background-color: #f1f5f9;
+            transform: translateY(-2px);
+        }
+        
+        .bookmarklet-button {
+            background-color: var(--dark);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(15, 23, 42, 0.2);
+            display: inline-block;
+            margin-top: 20px;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 16px;
+        }
+        
+        .bookmarklet-button:hover {
+            background-color: #1e293b;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(15, 23, 42, 0.3);
+        }
+        
+        .hero-image {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50%;
+            max-width: 600px;
+            border-radius: 12px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 100px 0;
+            background-color: white;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .section-header h2 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        .section-header p {
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .feature-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid var(--gray-light);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background-color: rgba(67, 97, 238, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .feature-icon svg {
+            width: 30px;
+            height: 30px;
+            color: var(--primary);
+        }
+        
+        .feature-card h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        .feature-card p {
+            color: var(--gray);
+        }
+        
+        /* How It Works */
+        .how-it-works {
+            padding: 100px 0;
+            background-color: #f8fafc;
+        }
+        
+        .steps {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+            position: relative;
+        }
+        
+        .steps::before {
+            content: '';
+            position: absolute;
+            top: 40px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: var(--gray-light);
+            z-index: 1;
+        }
+        
+        .step {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            width: 30%;
+        }
+        
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin: 0 auto 20px;
+        }
+        
+        .step h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        .step p {
+            color: var(--gray);
+        }
+        
+        /* CTA Section */
+        .cta {
+            padding: 100px 0;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            text-align: center;
+        }
+        
+        .cta h2 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        
+        .cta p {
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto 40px;
+            opacity: 0.9;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+        }
+        
+        .footer-logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 20px;
+            display: block;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 60px;
+        }
+        
+        .footer-links h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--gray-light);
+        }
+        
+        .footer-links ul {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-links a {
+            color: var(--gray-light);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--gray-light);
+            font-size: 14px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-image {
+                opacity: 0.3;
+                z-index: 0;
+            }
+            
+            .hero-content {
+                max-width: 100%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 42px;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+            }
+            
+            .steps {
+                flex-direction: column;
+                gap: 40px;
+            }
+            
+            .steps::before {
+                display: none;
+            }
+            
+            .step {
+                width: 100%;
+                text-align: left;
+                display: flex;
+                gap: 20px;
+                align-items: flex-start;
+            }
+            
+            .step-number {
+                margin: 0;
+                flex-shrink: 0;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 40px;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+                gap: 30px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <h1>NU Transcript Generator</h1>
-  <p>Click the button below to open FlexStudent. After logging in, your grades will appear here.</p>
-  
-  <button id="openPortal">Open FlexStudent Portal</button>
-  <div id="results"></div>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">FlexRizz</a>
+                <div class="nav-links">
+                    <a href="#features">Features</a>
+                    <a href="#how-it-works">How It Works</a>
+                    <a href="#faq">FAQ</a>
+                </div>
+                <a href="#install" class="cta-button">Install Now</a>
+            </nav>
+        </div>
+    </header>
 
-  <!-- Custom logic -->
-  <script>
-    document.getElementById('openPortal').addEventListener('click', () => {
-      // Open portal in a new tab
-      const portal = window.open('https://flexstudent.nu.edu.pk/', '_blank');
-      
-      // Listen for grades from inject.js
-      window.addEventListener('message', (event) => {
-        if (event.data?.type === 'FLEXRIZZ_GRADES_DATA') {
-          const grades = event.data.payload;
-          displayGrades(grades);
-        }
-      });
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Transform Your Flex Portal Experience</h1>
+                <p>FlexRizz enhances your university portal with beautiful visualizations, powerful analytics, and a modern interface - all with a simple bookmarklet.</p>
+                <div class="hero-buttons">
+                    <a href="#install" class="primary-button">Get FlexRizz</a>
+                    <a href="#how-it-works" class="secondary-button">How It Works</a>
+                </div>
+                <button id="bookmarklet" class="bookmarklet-button" draggable="true" onclick="alert('Drag this button to your bookmarks bar or click while on your student portal!')">
+                    ✨ Drag & Install FlexRizz
+                </button>
+            </div>
+        </div>
+    </section>
 
-      // Display grades in the results div
-      function displayGrades(grades) {
-        let html = '<h2>Your Transcript</h2><table>';
-        html += '<tr><th>Course</th><th>Grade</th><th>Credits</th></tr>';
-        
-        grades.forEach(course => {
-          html += `
-            <tr>
-              <td>${course.name || 'N/A'}</td>
-              <td>${course.grade || 'N/A'}</td>
-              <td>${course.credits || 'N/A'}</td>
-            </tr>
-          `;
-        });
-        
-        html += '</table>';
-        document.getElementById('results').innerHTML = html;
-      }
-    });
-  </script>
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Premium Features</h2>
+                <p>FlexRizz brings enterprise-grade enhancements to your student portal</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                    </div>
+                    <h3>Grade Analytics</h3>
+                    <p>Visualize your academic progress with beautiful charts and predictive grade analysis to help you stay on track.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
+                        </svg>
+                    </div>
+                    <h3>Modern Dashboard</h3>
+                    <p>Replaces outdated tables with a sleek, modern interface that's easier to navigate and more pleasant to use.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <h3>Performance Tracking</h3>
+                    <p>Track your academic performance over time with detailed statistics and personalized insights.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <h2>How FlexRizz Works</h2>
+                <p>Getting started takes just seconds - no installation required</p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Drag to Bookmarks</h3>
+                    <p>Simply drag the FlexRizz button to your browser's bookmarks bar.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Visit Your Portal</h3>
+                    <p>Navigate to your university student portal as you normally would.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Click to Activate</h3>
+                    <p>Click the FlexRizz bookmarklet to instantly transform your portal.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta" id="install">
+        <div class="container">
+            <h2>Ready to Transform Your Portal?</h2>
+            <p>Join thousands of students who've enhanced their academic experience with FlexRizz.</p>
+            <button id="bookmarklet-cta" class="bookmarklet-button" draggable="true" onclick="alert('Drag this button to your bookmarks bar or click while on your student portal!')">
+                ✨ Install FlexRizz Now
+            </button>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <a href="#" class="footer-logo">FlexRizz</a>
+                    <p>Premium enhancements for your student portal</p>
+                </div>
+                <div class="footer-links">
+                    <div>
+                        <h3>Product</h3>
+                        <ul>
+                            <li><a href="#features">Features</a></li>
+                            <li><a href="#how-it-works">How It Works</a></li>
+                            <li><a href="#faq">FAQ</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Legal</h3>
+                        <ul>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms of Service</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Connect</h3>
+                        <ul>
+                            <li><a href="#">GitHub</a></li>
+                            <li><a href="#">Twitter</a></li>
+                            <li><a href="#">Contact</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 FlexRizz. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Bookmarklet code
+        const bookmarkletCode = `javascript:(function(){
+            var l=document.createElement('link');
+            l.rel='stylesheet';
+            l.href='https://cdn.jsdelivr.net/gh/sanecodeguy/FlexRizz@main/styles.css';
+            l.onload=()=>console.log('✅ styles.css loaded');
+            document.head.appendChild(l);
+
+            var s2=document.createElement('script');
+            s2.src='https://cdn.jsdelivr.net/gh/sanecodeguy/FlexRizz@main/utils.js';
+            s2.onload=function(){
+                console.log('✅ utils.js loaded');
+                var s1=document.createElement('script');
+                s1.src='https://cdn.jsdelivr.net/gh/sanecodeguy/FlexRizz@main/inject.js';
+                s1.onload=function(){
+                    console.log('✅ inject.js loaded');
+                    console.log('✨ FlexRizz fully injected into:', document.documentElement);
+                };
+                document.body.appendChild(s1);
+            };
+            document.body.appendChild(s2);
+        })();`;
+
+        // Set the bookmarklet href
+        document.getElementById('bookmarklet').href = bookmarkletCode;
+        document.getElementById('bookmarklet-cta').href = bookmarkletCode;
+    </script>
 </body>
 </html>
